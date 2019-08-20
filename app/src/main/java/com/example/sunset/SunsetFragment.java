@@ -1,5 +1,6 @@
 package com.example.sunset;
 
+import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
@@ -70,6 +71,24 @@ public class SunsetFragment extends Fragment {
                 .setDuration(3000);
         sunsetSkyAnimator.setEvaluator(new ArgbEvaluator());
 
-        heightAnimator.start();
+        //AnimatorListener tells you when an animation completes.
+        // So you could write a listener that waits until the end
+        // of the first animation at which time you can start the
+        // second night sky animation.This is a huge hassle,though
+        // and requires  a lot of listeners.
+        // It is much easier to use an AnimatorSet.
+
+        ObjectAnimator nightSkyAnimator = ObjectAnimator
+                .ofInt(mSkyView,"backgroundColor",mSunsetSkyColor,mNightSkyColor)
+                .setDuration(1500);
+        nightSkyAnimator.setEvaluator(new ArgbEvaluator());
+
+        //Run an Animator set
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet
+                .play(heightAnimator)
+                .with(sunsetSkyAnimator)
+                .before(nightSkyAnimator);
+        animatorSet.start();
     }
 }
