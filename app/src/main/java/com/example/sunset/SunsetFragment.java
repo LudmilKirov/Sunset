@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class SunsetFragment extends Fragment {
-
     private View mSceneView;
     private View mSunView;
     private View mSkyView;
@@ -24,10 +23,10 @@ public class SunsetFragment extends Fragment {
     private int mSunsetSkyColor;
     private int mNightSkyColor;
     private boolean showingFirst = true;
+
     public static SunsetFragment newInstance() {
         return new SunsetFragment();
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,17 +45,15 @@ public class SunsetFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //First is sunset the is sunrise and is repeating
-                if(showingFirst) {
+                if (showingFirst) {
                     startAnimation();
-                    showingFirst=false;
-                }
-                else {
+                    showingFirst = false;
+                } else {
                     reverse();
-                    showingFirst=true;
+                    showingFirst = true;
                 }
             }
         });
-
         return view;
     }
 
@@ -68,7 +65,7 @@ public class SunsetFragment extends Fragment {
 
         //Where the animation should start and end
         ObjectAnimator heightAnimator = ObjectAnimator
-                .ofFloat(mSunView,"y",sunYStart,sunYEnd)
+                .ofFloat(mSunView, "y", sunYStart, sunYEnd)
                 .setDuration(3000);
         //make the sun speed up a bit at the beginning
         heightAnimator.setInterpolator(new AccelerateInterpolator());
@@ -76,7 +73,7 @@ public class SunsetFragment extends Fragment {
         ObjectAnimator sunsetSkyAnimator = ObjectAnimator
                 .ofInt(mSkyView,
                         "backgroundColor",
-                        mBlueSkyColor,mSunsetSkyColor)
+                        mBlueSkyColor, mSunsetSkyColor)
                 .setDuration(3000);
         sunsetSkyAnimator.setEvaluator(new ArgbEvaluator());
 
@@ -88,7 +85,7 @@ public class SunsetFragment extends Fragment {
         // It is much easier to use an AnimatorSet.
 
         ObjectAnimator nightSkyAnimator = ObjectAnimator
-                .ofInt(mSkyView,"backgroundColor",mSunsetSkyColor,mNightSkyColor)
+                .ofInt(mSkyView, "backgroundColor", mSunsetSkyColor, mNightSkyColor)
                 .setDuration(1500);
         nightSkyAnimator.setEvaluator(new ArgbEvaluator());
 
@@ -99,30 +96,27 @@ public class SunsetFragment extends Fragment {
                 .with(sunsetSkyAnimator)
                 .before(nightSkyAnimator);
         animatorSet.start();
-
     }
 
     //Show a sunrise
-    private void reverse(){
+    private void reverse() {
         //Return the local layout rect for the view
         float sunYStart = mSunView.getTop();
         float sunYEnd = mSkyView.getHeight();
 
         //Where the animation should start and end
         ObjectAnimator heightAnimator2 = ObjectAnimator
-                .ofFloat(mSunView,"y",sunYEnd,sunYStart)
+                .ofFloat(mSunView, "y", sunYEnd, sunYStart)
                 .setDuration(3000);
         //make the sun speed up a bit at the beginning
         heightAnimator2.setInterpolator(new AccelerateInterpolator());
 
-
         ObjectAnimator sunsetSkyAnimator2 = ObjectAnimator
                 .ofInt(mSkyView,
                         "backgroundColor",
-                        mSunsetSkyColor,mBlueSkyColor)
+                        mSunsetSkyColor, mBlueSkyColor)
                 .setDuration(3000);
         sunsetSkyAnimator2.setEvaluator(new ArgbEvaluator());
-
 
         //Run an Animator set
         AnimatorSet animatorSet2 = new AnimatorSet();
@@ -131,5 +125,4 @@ public class SunsetFragment extends Fragment {
                 .with(sunsetSkyAnimator2);
         animatorSet2.start();
     }
-
 }
